@@ -1,0 +1,26 @@
+services:
+  abi-downloader:
+    build: .
+    image: mxcoru/abi-portal:latest
+    hostname: abi-downloader
+    restart: always
+    volumes:
+      - ./downloader:/app/downloader
+    environment:
+      - RUST_LOG=info
+      - RUST_BACKTRACE=1
+      - DOWNLOADER_BASE_DIR=/app/downloader
+    ports:
+      - "8080:8080"
+
+  file_server:
+    build: .
+    image: mxcoru/abi-portal:latest
+    hostname: file-server
+    environment:
+      - FILE_SERVER="true"
+      - DOWNLOADER_BASE_DIR=/app/downloader
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./downloader:/app/downloader
